@@ -19,10 +19,10 @@ model.summary()
 
 
 class Model:
-    """Creating a model"""
+    """Creating a Model"""
     def __init__(self, input_size):
         self.input_size = input_size
-
+git
     def add_layer(self, number_of_filters, filter_size, ):
         tf.keras.layers.Conv2D(10, )        
         
