@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 from glob import glob
 import os
+from os.path import join
 import re
 from PIL import Image
 import seaborn as sns
@@ -19,8 +20,8 @@ class Preprocess:
 
     def label_set (self, directory):
         """
-        Obtains a set of train labels and add two colums for Sub_type and Patient_ID
-        Then, sort per 'ID' column and take the first 6,000 labels
+        Obtains a set of train labels and add two columns for Sub_type and Patient_ID
+        Then, sort per ID column and take the first 6,000 labels
         """
         train_labels = pd.read_csv(os.path.join(self.path, directory))
         train_labels['Sub_type'] = train_labels['ID'].str.split("_", n=3, expand=True)[2]
