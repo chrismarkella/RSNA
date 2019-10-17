@@ -1,7 +1,10 @@
 import pandas as pd
 import numpy as np
 from glob import glob
+<<<<<<< HEAD
+=======
 import os
+>>>>>>> bfbdd7f20b2185153de9b80034f3f5e4f25a3fee
 from os.path import join
 import re
 from PIL import Image
@@ -32,11 +35,11 @@ class Preprocess:
         return labels
 
 
-    def read_dcm_files(self, directory):
+    def read_dcm_files(directory):
         """
         Read all .dcm files into train and text
         """
-        train = sorted(glob(join(self.path, directory)))
+        train = sorted(glob(directory))
         return train
 
 
@@ -92,7 +95,7 @@ class Preprocess:
                         metadata[('0028','1052')].value, #intercept
                         metadata[('0028','1053')].value] #slope
                         
-        return [get_first_of_dicom_field_as_int(x) for x in dicom_fields]
+        return [self.get_first_of_dicom_field_as_int(x) for x in dicom_fields]
     
 
     def pixel_to_hounsefield(self, pixel_array, metadata):
@@ -110,4 +113,20 @@ class Preprocess:
 
         array_HU_decimalized = array_HU_shifted / (max - min)
         return array_HU_decimalized
-    
+
+    def transform_all_pixel_arrays(self, dicom_file_lst):
+        '''Return a normalized(0,1) version of the DICOM files as a list.
+        '''
+        normalized_pixel_arrays = []
+        for dicom_file in dicom_file_lst:
+            data = pydicom.dcmread(dicom_file)
+            window_center, window_width, intercept, slope = self.get_windowing(data)
+            pixel_array = data.pixel_array
+            pixel_array_HU = self.window_image(pixel_array, window_center, window_width, intercept, slope)
+            min = window_center - window_width // 2
+            pixel_array_HU_shifted = pixel_array_HU - min
+            pixel_array_normalized = pixel_array_HU_shifted / window_width
+            
+            normalized_pixel_arrays.append(pixel_array_normalized)
+        return normalized_pixel_arrays
+
