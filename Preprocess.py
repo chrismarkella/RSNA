@@ -1,7 +1,8 @@
 import pandas as pd
 import numpy as np
 from glob import glob
-import os
+# import os
+from os.path import join
 import re
 from PIL import Image
 import seaborn as sns
