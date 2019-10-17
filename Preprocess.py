@@ -1,10 +1,10 @@
 import pandas as pd
 import numpy as np
 from glob import glob
-<<<<<<< HEAD
-=======
+# <<<<<<< HEAD
+# =======
 import os
->>>>>>> bfbdd7f20b2185153de9b80034f3f5e4f25a3fee
+# >>>>>>> bfbdd7f20b2185153de9b80034f3f5e4f25a3fee
 from os.path import join
 import re
 from PIL import Image
@@ -19,7 +19,7 @@ class Preprocess:
     # initialize a newly created object
     def __init__(self, path):
         self.path = path
-    
+
 
     def label_set (self, directory):
         """
@@ -31,7 +31,7 @@ class Preprocess:
         train_labels['PatientID'] = train_labels['ID'].str.split("_", n=3, expand=True)[1]
         train_labels = train_labels.sort_values('ID')
         labels = train_labels[:6000]
-        
+
         return labels
 
 
@@ -57,15 +57,15 @@ class Preprocess:
         pixel_array_HU = (pixel_array_HU*slope + intercept)
         pixel_array_HU_min = window_center - window_width//2
         pixel_array_HU_max = window_center + window_width//2
-        
-        # removing outliers --> 
-        # how do we deal with outliers? 
+
+        # removing outliers -->
+        # how do we deal with outliers?
         # What if the following two lines of code remove meaningful data?
         pixel_array_HU[pixel_array_HU<pixel_array_HU_min] = pixel_array_HU_min
         pixel_array_HU[pixel_array_HU>pixel_array_HU_max] = pixel_array_HU_max
-            
+
         return pixel_array_HU
-        
+
 
     def display_img_HU(self, pixel_img, window_center, window_width, intercept, slope):
         """
@@ -74,7 +74,7 @@ class Preprocess:
         HU_img = window_image(pixel_img, window_center, window_width, intercept, slope)
         plt.imshow(HU_img, cmap=plt.cm.bone)
         plt.grid(False)
-    
+
 
     def get_first_of_dicom_field_as_int(self, x):
         """
@@ -94,14 +94,14 @@ class Preprocess:
                         metadata[('0028','1051')].value, #window width
                         metadata[('0028','1052')].value, #intercept
                         metadata[('0028','1053')].value] #slope
-                        
+
         return [self.get_first_of_dicom_field_as_int(x) for x in dicom_fields]
-    
+
 
     def pixel_to_hounsefield(self, pixel_array, metadata):
         return window_image(pixel_array, get_windowing(metadata))
 
-    
+
     def decimalize(self, image_HU):
         """
         Convert values of Housefield Units into a range of (0, 1)
@@ -115,8 +115,9 @@ class Preprocess:
         return array_HU_decimalized
 
     def transform_all_pixel_arrays(self, dicom_file_lst):
-        '''Return a normalized(0,1) version of the DICOM files as a list.
-        '''
+        """
+        Return a normalized(0,1) version of the DICOM files as a list.
+        """
         normalized_pixel_arrays = []
         for dicom_file in dicom_file_lst:
             data = pydicom.dcmread(dicom_file)
@@ -126,7 +127,7 @@ class Preprocess:
             min = window_center - window_width // 2
             pixel_array_HU_shifted = pixel_array_HU - min
             pixel_array_normalized = pixel_array_HU_shifted / window_width
-            
+
             normalized_pixel_arrays.append(pixel_array_normalized)
         return normalized_pixel_arrays
 
