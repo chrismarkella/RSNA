@@ -4,7 +4,6 @@ from glob import glob
 # <<<<<<< HEAD
 # =======
 import os
-# >>>>>>> bfbdd7f20b2185153de9b80034f3f5e4f25a3fee
 from os.path import join
 import re
 from PIL import Image
@@ -20,10 +19,10 @@ class Preprocess:
     def __init__(self, path):
         self.path = path
 
-    def label_set(self, directory):
+    def label_set(self, directory, start, size):
         """
         Obtains a set of train labels and add two columns for Sub_type and Patient_ID
-        Then, sort per ID column and take the first 6,000 labels
+        Then, sort per ID column and take labels in between start and start + size
         """
         train_labels = pd.read_csv(os.path.join(self.path, directory))
         train_labels['Sub_type'] = train_labels['ID'].str.split("_", n=3, expand=True)[
@@ -31,9 +30,17 @@ class Preprocess:
         train_labels['PatientID'] = train_labels['ID'].str.split("_", n=3, expand=True)[
             1]
         train_labels = train_labels.sort_values('ID')
-        labels = train_labels[:6000]
+        labels = train_labels[start:start+size]
 
         return labels
+
+
+    def binarize(value):
+        bin_list = [int(i) for i in bin(value)[2:]]
+        bin_list.reverse()
+        bin_list.extend([0] * (6 - len(bin_list)))
+        return bin_list
+
 
     def read_dcm_files(directory):
         """
