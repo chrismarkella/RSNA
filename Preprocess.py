@@ -1,10 +1,7 @@
 import pandas as pd
 import numpy as np
 from glob import glob
-<<<<<<< HEAD
-=======
 import os
->>>>>>> bfbdd7f20b2185153de9b80034f3f5e4f25a3fee
 from os.path import join
 import re
 from PIL import Image
