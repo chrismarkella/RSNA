@@ -4,7 +4,7 @@ from glob import glob
 import os
 from os.path import join
 import re
-from PIL import Image
+from pillow import Image
 import seaborn as sns
 from random import randrange
 import pydicom

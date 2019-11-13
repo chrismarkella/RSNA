@@ -8,6 +8,8 @@ RSNA Intracranial Hemorrhage Detection
 ```bash
 git clone https://github.com/chrismarkella/RSNA
 cd RSNA
+# If you don't have poetry, please install it here:
+# https://github.com/sdispater/poetry
 poetry install
 poetry shell
 python preprocess.py
